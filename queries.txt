@@ -1,0 +1,31 @@
+await Sked.aggregate([
+    {
+      $sort: {
+        _dateCreated: -1
+      }
+    }, {
+      $limit: 84
+    }, {
+      $sort: {
+        _SkedID: 1
+      }
+    }
+  ])
+
+{_dateCreated:{$eq:Date("2020-10-04T04:00:05.068+00:00")}}
+
+{
+  '_dateCreated': new Date('Sun, 14 Jun 2020 04:00:00 GMT'), 
+  'tasks._created': {
+    '$in': [
+      '2020-07-08T20:03:56.559Z', '2020-07-09T14:29:20.517Z'
+    ]
+  }
+}
+
+{
+  'tasks.shortTask': 'Change Russell\'s Gloves', 
+  '_dateCreated': new Date('Sun, 14 Jun 2020 04:00:00 GMT')
+}
+
+{$and:[{"tasks.shortTask":{$regex:".*Gloves.*"}},{"tasks.status":"complete"}]}

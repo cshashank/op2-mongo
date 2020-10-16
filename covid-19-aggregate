@@ -1,0 +1,27 @@
+[
+  {
+    '$sort': {
+      '_dateCreated': -1
+    }
+  }, {
+    '$unwind': {
+      'path': '$tasks'
+    }
+  }, {
+    '$match': {
+      'tasks.shortTask': {
+        '$regex': '.*Gloves.*'
+      }
+    }
+  }, {
+    '$match': {
+      'tasks.status': 'complete'
+    }
+  }, {
+    '$project': {
+      'tasks.shortTask': 1, 
+      'tasks.displayName': 1, 
+      'tasks.completedAt': 1
+    }
+  }
+]

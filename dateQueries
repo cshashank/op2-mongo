@@ -1,0 +1,4 @@
+var start = new Date(2010, 11, 1);
+var end = new Date(2010, 11, 30);
+
+db.posts.find({created_on: {$gte: start, $lt: end}});
