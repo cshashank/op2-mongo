@@ -1,0 +1,117 @@
+[
+  {
+    "$match": {
+      "_dateCreated": {
+        "$gte": {
+          "$date": "2020-10-01T00:00:00Z"
+        },
+        "$lt": {
+          "$date": "2020-11-01T00:00:00Z"
+        }
+      },
+      "tasks.status": {
+        "$in": [
+          "complete"
+        ]
+      }
+    }
+  },
+  {
+    "$unwind": "$tasks"
+  },
+  {
+    "$addFields": {
+      "_dateCreated": {
+        "$cond": {
+          "if": {
+            "$eq": [
+              {
+                "$type": "$_dateCreated"
+              },
+              "date"
+            ]
+          },
+          "then": "$_dateCreated",
+          "else": null
+        }
+      }
+    }
+  },
+  {
+    "$addFields": {
+      "__alias_0": {
+        "year": {
+          "$year": "$_dateCreated"
+        },
+        "month": {
+          "$subtract": [
+            {
+              "$month": "$_dateCreated"
+            },
+            1
+          ]
+        },
+        "date": {
+          "$dayOfMonth": "$_dateCreated"
+        }
+      }
+    }
+  },
+  {
+    "$group": {
+      "_id": {
+        "__alias_1": "$tasks.shortTask",
+        "__alias_2": "$tasks.status",
+        "__alias_0": "$__alias_0",
+        "__alias_3": "$tasks.completedBy"
+      },
+      "__alias_4": {
+        "$sum": {
+          "$cond": [
+            {
+              "$ne": [
+                {
+                  "$type": "$tasks.status"
+                },
+                "missing"
+              ]
+            },
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "__alias_1": "$_id.__alias_1",
+      "__alias_2": "$_id.__alias_2",
+      "__alias_0": "$_id.__alias_0",
+      "__alias_3": "$_id.__alias_3",
+      "__alias_4": 1
+    }
+  },
+  {
+    "$project": {
+      "value": "$__alias_4",
+      "group": "$__alias_1",
+      "group_series_0": "$__alias_2",
+      "group_series_1": "$__alias_0",
+      "group_series_2": "$__alias_3",
+      "_id": 0
+    }
+  },
+  {
+    "$sort": {
+      "group": 1,
+      "group_series_0": 1,
+      "group_series_1": 1,
+      "group_series_2": 1
+    }
+  },
+  {
+    "$limit": 50000
+  }
+]

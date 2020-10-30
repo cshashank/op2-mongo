@@ -1,0 +1,7 @@
+[{$unwind: {
+  path:"$tasks"
+}}, {$project: {
+  "tasks.shortTask":1
+}}, {$match: {
+  'tasks.shortTask': {$regex: 'Glove'}
+}}]

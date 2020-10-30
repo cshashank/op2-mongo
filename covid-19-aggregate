@@ -18,3 +18,7 @@
   }}, {$unwind: {
   path: "$tasks.assignedToUser"
 }}]
+
+
+{'tasks.shortTask': {$regex: '.*Gloves.*'}}
+{'tasks.status':  'complete'}
