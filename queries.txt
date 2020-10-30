@@ -29,3 +29,5 @@ await Sked.aggregate([
 }
 
 {$and:[{"tasks.shortTask":{$regex:".*Gloves.*"}},{"tasks.status":"complete"}]}
+
+test line
