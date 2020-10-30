@@ -1,7 +1,10 @@
 [{$unwind: {
   path:"$tasks"
 }}, {$project: {
-  "tasks.shortTask":1
+  "tasks.shortTask":1,
+  "tasks.completedAt":1,
+  "tasks.status":1
 }}, {$match: {
-  'tasks.shortTask': {$regex: 'Glove'}
+  'tasks.shortTask': {$regex: 'Glove'},
+  'tasks.status':'complete'
 }}]
